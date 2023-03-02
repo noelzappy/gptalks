@@ -9,14 +9,15 @@
  * Colors
  */
 export const Colors = {
-  // Example.tsx colors:
   transparent: 'rgba(0,0,0,0)',
-  inputBackground: '#FFFFFF',
-  white: '#ffffff',
-  text: '#212529',
-  primary: '#E14032',
-  success: '#28a745',
+  success: '#2a9d8f',
   error: '#dc3545',
+  primary: '#1DA1F2',
+  dark: '#14171A',
+  gray: '#657786',
+  grayLight: '#E1E8ED',
+  grayLighter: '#F5F8FA',
+  light: '#ffffff',
 };
 
 export const NavigationColors = {

@@ -12,14 +12,14 @@ export default function <C>({ Colors, ...args }: CommonParams<C>) {
     button: buttonStyles({ Colors, ...args }),
     ...StyleSheet.create({
       backgroundPrimary: {
-        backgroundColor: Colors.primary,
+        backgroundColor: Colors.light,
       },
       backgroundReset: {
         backgroundColor: Colors.transparent,
       },
       textInput: {
-        backgroundColor: Colors.inputBackground,
-        color: Colors.text,
+        backgroundColor: Colors.grayLighter,
+        color: Colors.dark,
         height: 45,
         borderRadius: 10,
         paddingStart: 20,

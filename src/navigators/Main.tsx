@@ -1,21 +1,14 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Example } from '../screens';
+import { Chats, Explores } from '@/screens';
 
 const Tab = createBottomTabNavigator();
 
-// @refresh reset
 const MainNavigator = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="Home"
-        component={Example}
-        options={{
-          tabBarIconStyle: { display: 'none' },
-          tabBarLabelPosition: 'beside-icon',
-        }}
-      />
+    <Tab.Navigator screenOptions={{ headerShown: false }}>
+      <Tab.Screen name="Chats" component={Chats} />
+      <Tab.Screen name="Explores" component={Explores} />
     </Tab.Navigator>
   );
 };

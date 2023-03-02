@@ -1,3 +1,4 @@
+import { RootState } from '@/store';
 import {
   BaseQueryFn,
   FetchArgs,
@@ -8,6 +9,17 @@ import {
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.API_URL,
+  prepareHeaders: (headers, { getState }) => {
+    const tokens = (getState() as RootState).auth.tokens;
+
+    if (tokens) {
+      headers.set('Authorization', `Bearer ${tokens.access.token}`);
+    }
+    headers.set('Accept', 'application/json');
+    headers.set('Content-Type', 'application/json');
+
+    return headers;
+  },
 });
 
 const baseQueryWithInterceptor: BaseQueryFn<
