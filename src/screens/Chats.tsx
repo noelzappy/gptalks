@@ -1,35 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import React from 'react';
+import { View, Text, FlatList, ListRenderItem } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks';
 import { Wrapper } from '@/components';
 import { clearCredentials } from '@/store/auth';
+import { Avatar, ListItem } from '@rneui/base';
+import { Chat } from '@/models/chat';
+import moment from 'moment';
 
 const Screen = () => {
-  const { t } = useTranslation('example');
-
   const { Fonts, Gutters, Layout } = useTheme();
   const dispatch = useDispatch();
 
-  const [i, setI] = useState(0);
+  const renderItem: ListRenderItem<Chat> = ({ item }) => {
+    return (
+      <ListItem>
+        <Avatar source={{ uri: 'https://picsum.photos/200' }} rounded />
+        <ListItem.Content>
+          <ListItem.Title style={[Fonts.textRegular]} numberOfLines={1}>
+            {item.subject}
+          </ListItem.Title>
+          <ListItem.Subtitle style={[Fonts.textSmall]} numberOfLines={1}>
+            {item.user}
+          </ListItem.Subtitle>
+        </ListItem.Content>
 
-  useEffect(() => {
-    setI(i + 1);
-  }, [dispatch]);
+        <View>
+          <Text numberOfLines={1} style={[Fonts.textSmall]}>
+            {moment().format('DD MMM YY')}
+          </Text>
+        </View>
+      </ListItem>
+    );
+  };
 
   return (
-    <Wrapper>
-      <View style={[Layout.fullWidth, Gutters.smallVMargin]}>
-        <Text
-          style={[Fonts.titleSmall, Gutters.smallBMargin]}
-          onPress={() => {
-            dispatch(clearCredentials());
-          }}
-        >
-          {t('titles.themeChoice')} {i}
-        </Text>
-      </View>
+    <Wrapper scrollable={false}>
+      <FlatList
+        data={[
+          {
+            id: '3',
+            subject: 'John Doe',
+            parentMessageId: '1',
+            user: 'John Doe',
+          },
+
+          {
+            id: '23',
+            subject: 'John Doe',
+            parentMessageId: '1',
+            user: 'John Doe',
+          },
+
+          {
+            id: '4',
+            subject: 'John Doe',
+            parentMessageId: '1',
+            user: 'John Doe',
+          },
+
+          {
+            id: '234',
+            subject: 'John Doe',
+            parentMessageId: '1',
+            user: 'John Doe',
+          },
+        ]}
+        renderItem={renderItem}
+      />
     </Wrapper>
   );
 };
