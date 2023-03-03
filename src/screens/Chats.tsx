@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks';
 import { Wrapper } from '@/components';
+import { clearCredentials } from '@/store/auth';
 
 const Screen = () => {
   const { t } = useTranslation('example');
@@ -20,7 +21,12 @@ const Screen = () => {
   return (
     <Wrapper>
       <View style={[Layout.fullWidth, Gutters.smallVMargin]}>
-        <Text style={[Fonts.titleSmall, Gutters.smallBMargin]}>
+        <Text
+          style={[Fonts.titleSmall, Gutters.smallBMargin]}
+          onPress={() => {
+            dispatch(clearCredentials());
+          }}
+        >
           {t('titles.themeChoice')} {i}
         </Text>
       </View>

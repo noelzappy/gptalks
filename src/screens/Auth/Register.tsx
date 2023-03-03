@@ -1,19 +1,59 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useTheme } from '@/hooks';
 import { Brand, Spacer, Wrapper } from '@/components';
 import { Button, Input } from '@rneui/base';
 import { ApplicationScreenProps } from 'types/navigation';
+import { useRegisterMutation } from '@/services/modules/auth';
+import { User, Tokens } from '@/models/auth';
+import { setCredentials } from '@/store/auth';
+import { useToast } from 'react-native-toast-notifications';
 
-const Screen = ({ navigation }: ApplicationScreenProps) => {
+const Screen = ({}: ApplicationScreenProps) => {
   const { Fonts, Gutters, Layout, Common, Colors } = useTheme();
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
+
+  const [register, { isLoading, data, error }] = useRegisterMutation();
+
+  useEffect(() => {
+    if (data) {
+      toast.show('Login successful', {
+        type: 'success',
+      });
+      const user: User = data.user;
+      const tokens: Tokens = data.tokens;
+
+      dispatch(
+        setCredentials({
+          user,
+          tokens,
+        }),
+      );
+    }
+
+    if (error) {
+      toast.show('Login failed. Try again', {
+        type: 'error',
+      });
+    }
+  }, [data, error]);
+
+  const onRegister = () => {
+    const payload = {
+      name,
+      email,
+      password,
+    };
+
+    register(payload);
+  };
 
   return (
     <Wrapper>
@@ -74,28 +114,15 @@ const Screen = ({ navigation }: ApplicationScreenProps) => {
           }}
         />
 
-        <TouchableOpacity
-          style={[Gutters.smallHPadding]}
-          onPress={() => navigation.navigate('ForgotPassword')}
-        >
-          <Text
-            style={[
-              Fonts.textSmall,
-
-              Fonts.textRight,
-              { color: Colors.primary },
-            ]}
-          >
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
-
         <Spacer size={20} />
 
         <Button
           title="Register"
-          onPress={() => {}}
+          onPress={() => {
+            onRegister();
+          }}
           buttonStyle={[Common.button]}
+          loading={isLoading}
         />
       </View>
     </Wrapper>

@@ -1,14 +1,14 @@
 export type User = {
-  name: String;
-  id: String;
-  email: String;
-  role: String;
-  isEmailVerified: Boolean;
+  name: string;
+  id: string;
+  email: string;
+  role: string;
+  isEmailVerified: boolean;
 };
 
 type Token = {
-  token: String;
-  expires: Date;
+  token: string;
+  expires: date;
 };
 
 export type Tokens = {

@@ -1,18 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useTheme } from '@/hooks';
 import { Brand, Spacer, Wrapper } from '@/components';
 import { Button, Input } from '@rneui/base';
 import { ApplicationScreenProps } from 'types/navigation';
+import { useLoginMutation } from '@/services/modules/auth';
+import { setCredentials } from '@/store/auth';
+import { User, Tokens } from '@/models/auth';
+import { useToast } from 'react-native-toast-notifications';
 
 const Screen = ({ navigation }: ApplicationScreenProps) => {
   const { Fonts, Gutters, Layout, Common, Colors } = useTheme();
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  const [login, { isLoading, data, error }] = useLoginMutation();
+
+  const onLogin = () => {
+    const payload = {
+      email,
+      password,
+    };
+
+    login(payload);
+  };
+
+  useEffect(() => {
+    if (data) {
+      toast.show('Login successful', {
+        type: 'success',
+      });
+      const user: User = data.user;
+      const tokens: Tokens = data.tokens;
+
+      dispatch(
+        setCredentials({
+          user,
+          tokens,
+        }),
+      );
+    }
+
+    if (error) {
+      toast.show('Login failed. Try again', {
+        type: 'error',
+      });
+    }
+  }, [data, error]);
 
   return (
     <Wrapper>
@@ -61,6 +100,7 @@ const Screen = ({ navigation }: ApplicationScreenProps) => {
         <TouchableOpacity
           style={[Gutters.smallHPadding]}
           onPress={() => navigation.navigate('ForgotPassword')}
+          disabled={isLoading}
         >
           <Text
             style={[
@@ -78,8 +118,11 @@ const Screen = ({ navigation }: ApplicationScreenProps) => {
 
         <Button
           title="Login"
-          onPress={() => {}}
+          onPress={() => {
+            onLogin();
+          }}
           buttonStyle={[Common.button]}
+          loading={isLoading}
         />
 
         <Spacer size={20} />
@@ -87,6 +130,7 @@ const Screen = ({ navigation }: ApplicationScreenProps) => {
         <TouchableOpacity
           style={[Gutters.smallHPadding]}
           onPress={() => navigation.navigate('Register')}
+          disabled={isLoading}
         >
           <Text style={[Fonts.textSmall, Fonts.textCenter]}>
             Don't have an account?{' '}
