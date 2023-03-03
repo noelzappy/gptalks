@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { AuthPayload, AuthState } from '@/models/auth';
+import { AuthPayload, AuthState } from 'types/auth';
 
 const slice = createSlice({
   name: 'auth',

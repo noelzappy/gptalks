@@ -1,20 +1,26 @@
 import React from 'react';
 import { View, Text, FlatList, ListRenderItem } from 'react-native';
-import { useDispatch } from 'react-redux';
+
 import { useTheme } from '@/hooks';
 import { Wrapper } from '@/components';
-import { clearCredentials } from '@/store/auth';
 import { Avatar, ListItem } from '@rneui/base';
-import { Chat } from '@/models/chat';
+import { Chat } from 'types/chat';
 import moment from 'moment';
+import { useNavigation } from '@react-navigation/native';
+import { Nav } from 'types/navigation';
 
 const Screen = () => {
-  const { Fonts, Gutters, Layout } = useTheme();
-  const dispatch = useDispatch();
+  const { Fonts } = useTheme();
+
+  const navigate = useNavigation<Nav>();
 
   const renderItem: ListRenderItem<Chat> = ({ item }) => {
     return (
-      <ListItem>
+      <ListItem
+        onPress={() => {
+          navigate.navigate('Chat', { id: item.id });
+        }}
+      >
         <Avatar source={{ uri: 'https://picsum.photos/200' }} rounded />
         <ListItem.Content>
           <ListItem.Title style={[Fonts.textRegular]} numberOfLines={1}>

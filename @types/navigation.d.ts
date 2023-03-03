@@ -2,8 +2,8 @@ import { NavigatorScreenParams } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 
 export type MainParamsList = {
+  Explores: undefined;
   Home: undefined;
-  Chats: undefined;
 };
 
 export type ApplicationStackParamList = {
@@ -11,7 +11,6 @@ export type ApplicationStackParamList = {
   Main: NavigatorScreenParams<MainParamsList>;
   Chats: undefined;
   Chat: { id: string };
-  Explores: undefined;
   Login: undefined;
   Register: undefined;
   ForgotPassword: undefined;
@@ -19,3 +18,7 @@ export type ApplicationStackParamList = {
 
 export type ApplicationScreenProps =
   StackScreenProps<ApplicationStackParamList>;
+
+type Nav = {
+  navigate: (screen: string, params: any) => void;
+};

@@ -6,7 +6,7 @@ import { Brand, Spacer, Wrapper } from '@/components';
 import { Button, Input } from '@rneui/base';
 import { ApplicationScreenProps } from 'types/navigation';
 import { useRegisterMutation } from '@/services/modules/auth';
-import { User, Tokens } from '@/models/auth';
+import { User, Tokens } from 'types/auth';
 import { setCredentials } from '@/store/auth';
 import { useToast } from 'react-native-toast-notifications';
 

@@ -7,7 +7,7 @@ import { Button, Input } from '@rneui/base';
 import { ApplicationScreenProps } from 'types/navigation';
 import { useLoginMutation } from '@/services/modules/auth';
 import { setCredentials } from '@/store/auth';
-import { User, Tokens } from '@/models/auth';
+import { User, Tokens } from 'types/auth';
 import { useToast } from 'react-native-toast-notifications';
 
 const Screen = ({ navigation }: ApplicationScreenProps) => {

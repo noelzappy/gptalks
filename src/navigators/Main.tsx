@@ -43,7 +43,8 @@ const MainNavigator = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Chats" component={Chats} />
+      <Tab.Screen name="Home" component={Chats} />
+
       <Tab.Screen name="Explores" component={Explores} />
     </Tab.Navigator>
   );

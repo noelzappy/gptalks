@@ -1,15 +1,13 @@
 import React from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-  NavigationContainer,
-  useNavigationContainerRef,
-} from '@react-navigation/native';
-import { Startup } from '@/screens';
+import { NavigationContainer } from '@react-navigation/native';
+import { Startup, Chat } from '@/screens';
 import { useTheme } from '@/hooks';
 import { useFlipper } from '@react-navigation/devtools';
 import { ApplicationStackParamList } from '../../@types/navigation';
 import Main from './Main';
+import { navigationRef } from './utils';
 
 const Stack = createStackNavigator<ApplicationStackParamList>();
 
@@ -17,8 +15,6 @@ const Stack = createStackNavigator<ApplicationStackParamList>();
 const ApplicationNavigator = () => {
   const { Layout, darkMode, NavigationTheme } = useTheme();
   const { colors } = NavigationTheme;
-
-  const navigationRef = useNavigationContainerRef();
 
   useFlipper(navigationRef);
 
@@ -29,6 +25,7 @@ const ApplicationNavigator = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Startup" component={Startup} />
           <Stack.Screen name="Main" component={Main} />
+          <Stack.Screen name="Chat" component={Chat} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
