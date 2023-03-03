@@ -8,7 +8,7 @@ const Tab = createBottomTabNavigator();
 
 function getIcon(iconName: string, size: number, color: string) {
   switch (iconName) {
-    case 'Chats':
+    case 'Home':
       return (
         <Icon name="chatbubble" size={size} color={color} type="ionicon" />
       );

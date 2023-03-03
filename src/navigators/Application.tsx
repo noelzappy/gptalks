@@ -24,8 +24,21 @@ const ApplicationNavigator = () => {
         <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Startup" component={Startup} />
-          <Stack.Screen name="Main" component={Main} />
-          <Stack.Screen name="Chat" component={Chat} />
+          <Stack.Screen
+            name="Main"
+            component={Main}
+            options={{
+              title: 'Home',
+            }}
+          />
+          <Stack.Screen
+            name="Chat"
+            component={Chat}
+            options={({ route }) => ({
+              title: route.params.name,
+              headerShown: true,
+            })}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

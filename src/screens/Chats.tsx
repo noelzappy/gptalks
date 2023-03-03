@@ -1,24 +1,39 @@
 import React from 'react';
-import { View, Text, FlatList, ListRenderItem } from 'react-native';
-
-import { useTheme } from '@/hooks';
-import { Wrapper } from '@/components';
-import { Avatar, ListItem } from '@rneui/base';
+import {
+  View,
+  Text,
+  FlatList,
+  ListRenderItem,
+  RefreshControl,
+} from 'react-native';
+import { useInfiniteQuery, useTheme } from '@/hooks';
+import { Spacer, Wrapper } from '@/components';
+import { Avatar, FAB, Image, ListItem } from '@rneui/base';
 import { Chat } from 'types/chat';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import { Nav } from 'types/navigation';
+import { chatApi } from '@/services/modules/chat';
+import { SheetManager } from 'react-native-actions-sheet';
 
 const Screen = () => {
-  const { Fonts } = useTheme();
+  const { Fonts, Colors, Images, Layout, Gutters } = useTheme();
 
   const navigate = useNavigation<Nav>();
+
+  const res = useInfiniteQuery(chatApi.endpoints.getChats);
+
+  const onShowSheet = async () => {
+    const data: Chat = await SheetManager.show('createChat');
+    res.refetch();
+    navigate.navigate('Chat', { chatId: data.id, name: data.subject });
+  };
 
   const renderItem: ListRenderItem<Chat> = ({ item }) => {
     return (
       <ListItem
         onPress={() => {
-          navigate.navigate('Chat', { id: item.id });
+          navigate.navigate('Chat', { chatId: item.id, name: item.subject });
         }}
       >
         <Avatar source={{ uri: 'https://picsum.photos/200' }} rounded />
@@ -33,7 +48,7 @@ const Screen = () => {
 
         <View>
           <Text numberOfLines={1} style={[Fonts.textSmall]}>
-            {moment().format('DD MMM YY')}
+            {moment(item.date).format('DD MMM YY')}
           </Text>
         </View>
       </ListItem>
@@ -43,36 +58,38 @@ const Screen = () => {
   return (
     <Wrapper scrollable={false}>
       <FlatList
-        data={[
-          {
-            id: '3',
-            subject: 'John Doe',
-            parentMessageId: '1',
-            user: 'John Doe',
-          },
-
-          {
-            id: '23',
-            subject: 'John Doe',
-            parentMessageId: '1',
-            user: 'John Doe',
-          },
-
-          {
-            id: '4',
-            subject: 'John Doe',
-            parentMessageId: '1',
-            user: 'John Doe',
-          },
-
-          {
-            id: '234',
-            subject: 'John Doe',
-            parentMessageId: '1',
-            user: 'John Doe',
-          },
-        ]}
+        data={res.data}
         renderItem={renderItem}
+        refreshControl={
+          <RefreshControl refreshing={res.isLoading} onRefresh={res.refetch} />
+        }
+        ListEmptyComponent={() => {
+          if (res.isLoading) return null;
+          return (
+            <View style={[Layout.colCenter, Gutters.smallHPadding]}>
+              <Spacer size={90} />
+              <Image source={Images.chat} style={{ height: 300, width: 300 }} />
+              <Text style={[Fonts.textLarge, Fonts.textCenter]}>
+                You have not started a conversation yet.
+              </Text>
+            </View>
+          );
+        }}
+        onEndReached={res.fetchNextPage}
+        onEndReachedThreshold={0.5}
+      />
+
+      <FAB
+        onPress={() => {
+          onShowSheet();
+        }}
+        placement="right"
+        icon={{
+          name: 'chat-plus',
+          type: 'material-community',
+          color: Colors.light,
+        }}
+        color={Colors.primary}
       />
     </Wrapper>
   );

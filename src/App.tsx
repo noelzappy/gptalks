@@ -5,6 +5,8 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import { ToastProvider } from 'react-native-toast-notifications';
 import { store, persistor } from './store';
 import ApplicationNavigator from './navigators';
+import { SheetProvider } from 'react-native-actions-sheet';
+import './components/sheets';
 import './translations';
 
 const App = () => (
@@ -18,7 +20,9 @@ const App = () => (
      */}
     <PersistGate loading={null} persistor={persistor}>
       <ToastProvider>
-        <ApplicationNavigator />
+        <SheetProvider>
+          <ApplicationNavigator />
+        </SheetProvider>
       </ToastProvider>
     </PersistGate>
   </Provider>

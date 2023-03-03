@@ -27,6 +27,8 @@ const baseQueryWithInterceptor: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
+  console.log(args);
+
   let result = await baseQuery(args, api, extraOptions);
   if (result.error && result.error.status === 401) {
   }

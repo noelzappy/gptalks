@@ -33,6 +33,22 @@ export default function <C>({ Colors }: CommonParams<C>) {
         height: 50,
         borderRadius: 50,
       },
+      userBubble: {
+        backgroundColor: Colors.primary,
+        padding: 10,
+        borderRadius: 10,
+        maxWidth: '80%',
+        marginVertical: 10,
+        alignSelf: 'flex-end',
+      },
+      botBubble: {
+        backgroundColor: Colors.grayLight,
+        padding: 10,
+        borderRadius: 10,
+        maxWidth: '80%',
+        marginVertical: 10,
+        alignSelf: 'flex-start',
+      },
     }),
   };
 }

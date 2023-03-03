@@ -2,7 +2,7 @@ import { api } from '@/services/api';
 
 type AuthResponse = any;
 
-export const userApi = api.injectEndpoints({
+export const authApi = api.injectEndpoints({
   endpoints: build => ({
     login: build.mutation<AuthResponse, { email: string; password: string }>({
       query: ({ email, password }) => ({
@@ -35,4 +35,4 @@ export const userApi = api.injectEndpoints({
 });
 
 export const { useLoginMutation, useRegisterMutation, useLogoutMutation } =
-  userApi;
+  authApi;
