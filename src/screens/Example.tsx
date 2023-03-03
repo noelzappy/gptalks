@@ -1,19 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text } from 'react-native';
-import { useDispatch } from 'react-redux';
-
 import { useTheme } from '@/hooks';
 import { Wrapper } from '@/components';
+import { ApplicationScreenProps } from 'types/navigation';
 
-const Screen = () => {
+const Screen = ({}: ApplicationScreenProps) => {
   const { Fonts, Gutters, Layout } = useTheme();
-  const dispatch = useDispatch();
-
-  const [i, setI] = useState(0);
-
-  useEffect(() => {
-    setI(i + 1);
-  }, [dispatch]);
 
   return (
     <Wrapper>

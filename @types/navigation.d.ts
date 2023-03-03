@@ -14,6 +14,7 @@ export type ApplicationStackParamList = {
   Explores: undefined;
   Login: undefined;
   Register: undefined;
+  ForgotPassword: undefined;
 };
 
 export type ApplicationScreenProps =

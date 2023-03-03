@@ -8,11 +8,17 @@ type Props = {
 };
 
 const Wrapper = ({ children, scrollable }: Props) => {
-  const { Layout, Common } = useTheme();
+  const { Layout, Common, Gutters } = useTheme();
 
   return (
     <SafeAreaView style={[Layout.fill, Common.backgroundPrimary]}>
-      {scrollable ? <ScrollView>{children}</ScrollView> : children}
+      {scrollable ? (
+        <ScrollView contentContainerStyle={[Gutters.smallHPadding]}>
+          {children}
+        </ScrollView>
+      ) : (
+        children
+      )}
     </SafeAreaView>
   );
 };
