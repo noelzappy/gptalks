@@ -8,7 +8,6 @@ import { ApplicationStackParamList } from '../../@types/navigation';
 
 const Stack = createStackNavigator<ApplicationStackParamList>();
 
-// @refresh reset
 const AuthNavigator = () => {
   const { Layout, darkMode, NavigationTheme } = useTheme();
   const { colors } = NavigationTheme;

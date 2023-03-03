@@ -8,19 +8,19 @@ export default function ({ FontSize, Colors }: ThemeVariables) {
   return StyleSheet.create({
     textTiny: {
       fontSize: FontSize.tiny,
-      color: Colors.text,
+      color: Colors.dark,
     },
     textSmall: {
       fontSize: FontSize.small,
-      color: Colors.text,
+      color: Colors.dark,
     },
     textRegular: {
       fontSize: FontSize.regular,
-      color: Colors.text,
+      color: Colors.dark,
     },
     textLarge: {
       fontSize: FontSize.large,
-      color: Colors.text,
+      color: Colors.dark,
     },
     textBold: {
       fontWeight: 'bold',
@@ -31,17 +31,17 @@ export default function ({ FontSize, Colors }: ThemeVariables) {
     titleSmall: {
       fontSize: FontSize.small * 2,
       fontWeight: 'bold',
-      color: Colors.text,
+      color: Colors.dark,
     },
     titleRegular: {
       fontSize: FontSize.regular * 2,
       fontWeight: 'bold',
-      color: Colors.text,
+      color: Colors.dark,
     },
     titleLarge: {
       fontSize: FontSize.large * 2,
       fontWeight: 'bold',
-      color: Colors.text,
+      color: Colors.dark,
     },
     textCenter: {
       textAlign: 'center',

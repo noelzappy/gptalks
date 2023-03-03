@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks';
-import { Wrapper } from '@/components';
+import { Brand, Wrapper } from '@/components';
+import { Input } from '@rneui/base';
 
 const Screen = () => {
-  const { t } = useTranslation('example');
-
   const { Fonts, Gutters, Layout } = useTheme();
   const dispatch = useDispatch();
 
@@ -19,10 +17,16 @@ const Screen = () => {
 
   return (
     <Wrapper>
-      <View style={[Layout.fullWidth, Gutters.smallVMargin]}>
+      <View style={[Layout.center]}>
+        <Brand />
         <Text style={[Fonts.titleSmall, Gutters.smallBMargin]}>
-          {t('titles.themeChoice')} {i}
+          Log in to GPTalks
         </Text>
+      </View>
+      <View style={[Layout.fullWidth, Gutters.smallVMargin]}>
+        <Input placeholder="Email"
+        
+        />
       </View>
     </Wrapper>
   );
