@@ -61,7 +61,7 @@ const ApplicationNavigator = () => {
   return (
     <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]}>
       {showPlayer && (
-        <Animatable.View animation="fadeIn">
+        <Animatable.View animation="fadeInDown" duration={300}>
           <View
             style={[
               Layout.row,
