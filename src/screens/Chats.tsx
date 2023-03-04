@@ -26,6 +26,7 @@ const Screen = () => {
   const onShowSheet = async () => {
     const data: Chat = await SheetManager.show('createChat');
     res.refetch();
+    if (!data) return;
     navigate.navigate('Chat', { chatId: data.id, name: data.subject });
   };
 

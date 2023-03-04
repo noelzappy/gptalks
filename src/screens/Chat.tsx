@@ -209,6 +209,7 @@ const Screen = ({ route }: AllScreenProps) => {
               onContentSizeChange={e => {
                 setInputHeight(e.nativeEvent.contentSize.height);
               }}
+              autoFocus
             />
           </View>
           <TouchableOpacity
