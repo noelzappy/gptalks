@@ -27,22 +27,18 @@ const ApplicationNavigator = () => {
 
   const initTts = async () => {
     try {
-      const voices = await Tts.voices();
-      const availableVoices = voices
-        .filter(v => !v.networkConnectionRequired && !v.notInstalled)
-        .map(v => {
-          return { id: v.id, name: v.name, language: v.language };
-        })
-        .filter(v => v.language.startsWith('en'));
-
-      const randomIndex = Math.floor(Math.random() * availableVoices.length);
-
-      const defaultVoice = availableVoices[randomIndex];
-
-      if (defaultVoice) {
-        await Tts.setDefaultLanguage('en-US');
-        await Tts.setDefaultVoice(defaultVoice.id);
-      }
+      // const voices = await Tts.voices();
+      // const availableVoices = voices
+      //   .filter(v => !v.networkConnectionRequired && !v.notInstalled)
+      //   .map(v => {
+      //     return { id: v.id, name: v.name, language: v.language };
+      //   })
+      //   .filter(v => v.language.startsWith('en'));
+      // const defaultVoice = availableVoices.find(v => v.name === 'Samantha');
+      // if (defaultVoice) {
+      //   await Tts.setDefaultLanguage('en-US');
+      //   // await Tts.setDefaultVoice(defaultVoice.id);
+      // }
     } catch (err) {}
   };
 
