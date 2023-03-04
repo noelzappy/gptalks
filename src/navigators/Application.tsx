@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { Startup, Chat } from '@/screens';
+import { Startup, Chat, Post } from '@/screens';
 import { useTheme } from '@/hooks';
 import { useFlipper } from '@react-navigation/devtools';
 import { ApplicationStackParamList } from '../../@types/navigation';
@@ -38,6 +38,14 @@ const ApplicationNavigator = () => {
               title: route.params.name,
               headerShown: true,
             })}
+          />
+          <Stack.Screen
+            name="Post"
+            component={Post}
+            options={{
+              title: 'Post',
+              headerShown: true,
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

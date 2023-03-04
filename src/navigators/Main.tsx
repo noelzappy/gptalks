@@ -44,7 +44,6 @@ const MainNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={Chats} />
-
       <Tab.Screen name="Explores" component={Explores} />
     </Tab.Navigator>
   );
