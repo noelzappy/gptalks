@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -15,20 +15,89 @@ import socket from '@/services/socket';
 import { ChatMessage } from 'types/chat';
 import { Icon } from '@rneui/base';
 import * as Animatable from 'react-native-animatable';
+import { SheetManager } from 'react-native-actions-sheet';
+import { useToast } from 'react-native-toast-notifications';
 
 const Screen = ({ route }: AllScreenProps) => {
   const { Fonts, Gutters, Layout, Common, Colors } = useTheme();
   const { chatId } = route.params;
+
+  const toast = useToast();
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [text, setText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [inputHeight, setInputHeight] = useState<number>(40);
+  const [chatToPost, setChatToPost] = useState<ChatMessage[]>([]);
+  const [sentMessage, setSentMessage] = useState<ChatMessage | undefined>(
+    undefined,
+  );
 
   const io = socket();
 
   const flatListRef = useRef<FlatList<ChatMessage>>(null);
+
+  const isSelected = (item: ChatMessage) => {
+    const isIncluded = chatToPost.find(chat => chat.id === item.id);
+    return !!isIncluded;
+  };
+
+  const hasSenderType = (sender: string) => {
+    const hasSender = chatToPost.find(chat => chat.sender === sender);
+    return !!hasSender;
+  };
+
+  const onStartPost = async () => {
+    const dd = await SheetManager.show('createPost', {
+      payload: {
+        chatToPost,
+      },
+    });
+    if (dd) {
+      setChatToPost([]);
+      toast.show('You message was published');
+    }
+  };
+
+  const onPostChat = (item: ChatMessage) => {
+    const isIncluded = isSelected(item);
+    const hasBotSender = hasSenderType('bot');
+    const hasUserSender = hasSenderType('user');
+
+    if (isIncluded) {
+      setChatToPost(prev => {
+        const newChat = prev.filter(chat => chat.id !== item.id);
+        return [...newChat];
+      });
+      return;
+    }
+    if (item.sender === 'bot' && hasBotSender) {
+      setChatToPost(prev => {
+        const newChat = prev.filter(chat => chat.sender !== 'bot');
+        return [...newChat, item];
+      });
+      return;
+    }
+    if (item.sender === 'user' && hasUserSender) {
+      setChatToPost(prev => {
+        const newChat = prev.filter(chat => chat.sender !== 'user');
+        return [...newChat, item];
+      });
+      return;
+    }
+
+    if (chatToPost.length < 2 && !isIncluded) {
+      setChatToPost(prev => [...prev, item]);
+    }
+
+    if (chatToPost.length === 2 && !isIncluded) {
+      setChatToPost(prev => {
+        const newChat = prev.slice(1);
+        return [...newChat, item];
+      });
+    }
+  };
 
   useEffect(() => {
     io.on('connect_error', () => {
@@ -64,18 +133,17 @@ const Screen = ({ route }: AllScreenProps) => {
       setMessages(newMessages);
     });
 
-    io.on('message', (data: ChatMessage) => {
+    io.on('message', (data: ChatMessage[]) => {
       setMessages(prev => {
         const newMessages = prev.filter(item => item.id !== 'new_local_msg');
-        return [...newMessages, data];
-      });
-    });
 
-    io.on('messageSent', (data: ChatMessage) => {
-      setMessages(prev => {
-        const newMessages = prev.filter(item => item.id !== 'new_local_msg');
-        return [...newMessages, data];
+        newMessages.sort((a, b) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        });
+
+        return [...newMessages, ...data];
       });
+      setSentMessage(undefined);
     });
 
     return () => {
@@ -98,14 +166,20 @@ const Screen = ({ route }: AllScreenProps) => {
       parentMessageId: messages[lastMsgIndex]?.parentMessageId,
     };
     io.emit('message', message);
-    setMessages(prev => [...prev, message]);
+    setSentMessage(message);
 
     setText('');
   };
 
-  const renderItem: ListRenderItem<ChatMessage> = useCallback(({ item }) => {
-    return <ChatBubble item={item} />;
-  }, []);
+  const renderItem: ListRenderItem<ChatMessage> = ({ item }) => {
+    return (
+      <ChatBubble
+        item={item}
+        onShare={onPostChat}
+        selected={isSelected(item)}
+      />
+    );
+  };
 
   return (
     <Wrapper scrollable={false}>
@@ -127,87 +201,127 @@ const Screen = ({ route }: AllScreenProps) => {
         ]}
         inverted
         ListHeaderComponent={() => {
-          if (isTyping)
-            return (
-              <Animatable.View
-                style={[
-                  Common.botBubble,
-                  {
-                    backgroundColor: Colors.grayLighter,
-                  },
-                ]}
-                animation="fadeIn"
-                duration={500}
-              >
-                <Text
+          return (
+            <View>
+              {sentMessage && <ChatBubble item={sentMessage} disabled />}
+
+              {isTyping && (
+                <Animatable.View
                   style={[
-                    Fonts.textBold,
+                    Common.botBubble,
                     {
-                      color: Colors.dark,
-                      fontStyle: 'italic',
+                      backgroundColor: Colors.grayLighter,
                     },
                   ]}
+                  animation="fadeIn"
+                  duration={500}
                 >
-                  Typing...
-                </Text>
-              </Animatable.View>
-            );
-
-          return <Spacer size={10} />;
+                  <Text
+                    style={[
+                      Fonts.textBold,
+                      {
+                        color: Colors.dark,
+                        fontStyle: 'italic',
+                      },
+                    ]}
+                  >
+                    Typing...
+                  </Text>
+                </Animatable.View>
+              )}
+              <Spacer size={20} />
+            </View>
+          );
         }}
       />
-      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100}>
-        <View
+
+      {chatToPost.length > 0 && (
+        <Animatable.View
+          animation="fadeInUp"
+          duration={500}
           style={[
             Layout.row,
-            Layout.justifyContentBetween,
+            Layout.justifyContentCenter,
             Layout.alignItemsCenter,
+            Gutters.smallVPadding,
             {
-              paddingHorizontal: 5,
+              backgroundColor: Colors.grayLighter,
             },
           ]}
         >
-          <View
-            style={[
-              Common.chatInput,
-              Layout.fill,
-              Layout.center,
-              {
-                height: inputHeight > 40 ? inputHeight + 10 : 48,
-                maxHeight: 110,
-                borderRadius: inputHeight > 40 ? 20 : 30,
-              },
-            ]}
+          <TouchableOpacity
+            style={[Gutters.smallRMargin, Common.chatMenuIcon]}
+            onPress={() => {
+              onStartPost();
+            }}
+            disabled={chatToPost.length !== 2}
           >
-            <TextInput
-              placeholder="Type a message"
-              value={text}
-              onChangeText={setText}
+            <Icon name="share" size={30} color={Colors.dark} type="feather" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setChatToPost([])}
+            style={[Common.chatMenuIcon]}
+          >
+            <Icon name="closecircleo" type="antdesign" size={30} />
+          </TouchableOpacity>
+        </Animatable.View>
+      )}
+      {chatToPost.length === 0 && (
+        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100}>
+          <Animatable.View animation="fadeInUp" duration={300}>
+            <View
               style={[
-                Layout.fullWidth,
-                Gutters.smallHPadding,
-                Fonts.textSmall,
+                Layout.row,
+                Layout.justifyContentBetween,
+                Layout.alignItemsCenter,
                 {
-                  maxHeight: 100,
+                  paddingHorizontal: 5,
                 },
               ]}
-              multiline
-              numberOfLines={6}
-              onContentSizeChange={e => {
-                setInputHeight(e.nativeEvent.contentSize.height);
-              }}
-              autoFocus
-            />
-          </View>
-          <TouchableOpacity
-            style={[Common.chatIcon, Layout.center]}
-            onPress={onSendMessage}
-            disabled={!text}
-          >
-            <Icon name="send" color={Colors.light} size={25} />
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+            >
+              <View
+                style={[
+                  Common.chatInput,
+                  Layout.fill,
+                  Layout.center,
+                  {
+                    height: inputHeight > 40 ? inputHeight + 10 : 48,
+                    maxHeight: 110,
+                    borderRadius: inputHeight > 40 ? 20 : 30,
+                  },
+                ]}
+              >
+                <TextInput
+                  placeholder="Type a message"
+                  value={text}
+                  onChangeText={setText}
+                  style={[
+                    Layout.fullWidth,
+                    Gutters.smallHPadding,
+                    Fonts.textSmall,
+                    {
+                      maxHeight: 100,
+                    },
+                  ]}
+                  multiline
+                  numberOfLines={6}
+                  onContentSizeChange={e => {
+                    setInputHeight(e.nativeEvent.contentSize.height);
+                  }}
+                  autoFocus
+                />
+              </View>
+              <TouchableOpacity
+                style={[Common.chatIcon, Layout.center]}
+                onPress={onSendMessage}
+                disabled={!text}
+              >
+                <Icon name="send" color={Colors.light} size={25} />
+              </TouchableOpacity>
+            </View>
+          </Animatable.View>
+        </KeyboardAvoidingView>
+      )}
     </Wrapper>
   );
 };

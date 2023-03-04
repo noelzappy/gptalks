@@ -13,6 +13,7 @@
     "pod-install": "cd ios && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install && cd .."
   },
   "dependencies": {
+    "@react-native-clipboard/clipboard": "^1.11.2",
     "@react-native-masked-view/masked-view": "^0.2.8",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
