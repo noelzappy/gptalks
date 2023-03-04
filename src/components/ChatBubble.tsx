@@ -9,6 +9,7 @@ import { Icon } from '@rneui/base';
 import * as Animatable from 'react-native-animatable';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useToast } from 'react-native-toast-notifications';
+import Tts from 'react-native-tts';
 
 type Props = {
   item: ChatMessage;
@@ -69,6 +70,11 @@ const ChatBubble = ({
   const onCopy = () => {
     Clipboard.setString(item.message);
     toast.show('Copied to clipboard');
+  };
+
+  const onPlay = () => {
+    Tts.stop();
+    Tts.speak(item.message);
   };
 
   return (
@@ -165,6 +171,16 @@ const ChatBubble = ({
                   color={Colors.dark}
                   type="feather"
                 />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[Common.chatMenuIcon]}
+                onPress={() => {
+                  onPlay();
+                  onPress();
+                }}
+              >
+                <Icon name="playcircleo" type="antdesign" size={30} />
               </TouchableOpacity>
             </View>
           </Animatable.View>
