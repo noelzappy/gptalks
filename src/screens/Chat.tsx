@@ -13,10 +13,14 @@ import { ChatBubble, MessageSkeleton, Spacer, Wrapper } from '@/components';
 import { AllScreenProps } from 'types/navigation';
 import socket from '@/services/socket';
 import { ChatMessage } from 'types/chat';
-import { Icon } from '@rneui/base';
+import { Icon, LinearProgress } from '@rneui/base';
 import * as Animatable from 'react-native-animatable';
 import { SheetManager } from 'react-native-actions-sheet';
 import { useToast } from 'react-native-toast-notifications';
+import Voice, {
+  SpeechResultsEvent,
+  SpeechErrorEvent,
+} from '@react-native-voice/voice';
 
 const Screen = ({ route }: AllScreenProps) => {
   const { Fonts, Gutters, Layout, Common, Colors } = useTheme();
@@ -25,7 +29,7 @@ const Screen = ({ route }: AllScreenProps) => {
   const toast = useToast();
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [text, setText] = useState('');
+  const [text, setText] = useState<string>('');
   const [isTyping, setIsTyping] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [inputHeight, setInputHeight] = useState<number>(40);
@@ -33,6 +37,9 @@ const Screen = ({ route }: AllScreenProps) => {
   const [sentMessage, setSentMessage] = useState<ChatMessage | undefined>(
     undefined,
   );
+
+  const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
+  const [isRecognizing, setIsRecognizing] = useState(false);
 
   const io = socket();
 
@@ -133,16 +140,8 @@ const Screen = ({ route }: AllScreenProps) => {
       setMessages(newMessages);
     });
 
-    io.on('message', (data: ChatMessage[]) => {
-      setMessages(prev => {
-        const newMessages = prev.filter(item => item.id !== 'new_local_msg');
-
-        newMessages.sort((a, b) => {
-          return new Date(a.date).getTime() - new Date(b.date).getTime();
-        });
-
-        return [...newMessages, ...data];
-      });
+    io.on('message', (data: ChatMessage) => {
+      setMessages(prev => [...prev, data]);
       setSentMessage(undefined);
     });
 
@@ -151,6 +150,58 @@ const Screen = ({ route }: AllScreenProps) => {
       io.disconnect();
     };
   }, []);
+
+  const onSpeechResults = (e: SpeechResultsEvent) => {
+    if (e.value && e.value.length > 0) {
+      setText(e.value[0]);
+    }
+  };
+
+  const onSpeechEnd = () => {
+    setIsRecognizing(false);
+  };
+
+  const onSpeechError = (e: SpeechErrorEvent) => {
+    console.log('onSpeechError: ', e.error);
+  };
+
+  useEffect(() => {
+    Voice.getSpeechRecognitionServices();
+
+    Voice.onSpeechEnd = onSpeechEnd;
+    Voice.onSpeechError = onSpeechError;
+    Voice.onSpeechResults = onSpeechResults;
+
+    return () => {
+      Voice.destroy().then(Voice.removeAllListeners);
+    };
+  }, []);
+
+  const onStartRecord = async () => {
+    try {
+      const isAvailable = await Voice.isAvailable();
+
+      if (!isAvailable) {
+        toast.show('Voice recognition is not available on this device');
+        return;
+      }
+      await Voice.start('en-US');
+      setIsRecognizing(true);
+    } catch (e) {
+      toast.show('Voice recognition is not available on this device');
+    }
+  };
+
+  const onStopRecord = async () => {
+    try {
+      await Voice.cancel();
+      await Voice.stop();
+    } catch (e) {
+    } finally {
+      setIsRecognizing(false);
+      setShowVoiceRecorder(false);
+    }
+  };
 
   const onSendMessage = () => {
     const lastMsgIndex = messages.length - 1;
@@ -166,7 +217,6 @@ const Screen = ({ route }: AllScreenProps) => {
       parentMessageId: messages[lastMsgIndex]?.parentMessageId,
     };
     io.emit('message', message);
-    setSentMessage(message);
 
     setText('');
   };
@@ -178,6 +228,42 @@ const Screen = ({ route }: AllScreenProps) => {
         onShare={onPostChat}
         selected={isSelected(item)}
       />
+    );
+  };
+
+  const renderActionIcons = () => {
+    if (showVoiceRecorder) return null;
+
+    return !text ? (
+      <Animatable.View animation="bounceIn" duration={300}>
+        <TouchableOpacity
+          style={[Common.chatIcon, Layout.center]}
+          onLongPress={() => {
+            setShowVoiceRecorder(true);
+            onStartRecord();
+          }}
+          onPressIn={() => {
+            setShowVoiceRecorder(true);
+          }}
+        >
+          <Icon
+            name="microphone"
+            color={Colors.light}
+            size={25}
+            type="font-awesome"
+          />
+        </TouchableOpacity>
+      </Animatable.View>
+    ) : (
+      <Animatable.View animation="bounceIn" duration={300}>
+        <TouchableOpacity
+          style={[Common.chatIcon, Layout.center]}
+          onPress={onSendMessage}
+          disabled={!text}
+        >
+          <Icon name="send" color={Colors.light} size={25} />
+        </TouchableOpacity>
+      </Animatable.View>
     );
   };
 
@@ -235,7 +321,74 @@ const Screen = ({ route }: AllScreenProps) => {
         }}
       />
 
-      {chatToPost.length > 0 && (
+      {showVoiceRecorder && (
+        <Animatable.View
+          animation="fadeInUp"
+          duration={500}
+          style={[
+            {
+              backgroundColor: Colors.grayLighter,
+            },
+          ]}
+        >
+          <View style={[Gutters.smallHMargin]}>
+            <LinearProgress
+              color={Colors.primary}
+              style={{
+                height: 5,
+                borderRadius: 10,
+              }}
+              variant={isRecognizing ? 'indeterminate' : 'determinate'}
+            />
+          </View>
+
+          <View
+            style={[
+              Layout.row,
+              Layout.justifyContentBetween,
+              Layout.alignItemsCenter,
+              Gutters.smallVPadding,
+            ]}
+          >
+            <TouchableOpacity
+              style={[Gutters.smallRMargin, Common.chatMenuIcon]}
+              onPress={() => {
+                onStopRecord();
+              }}
+            >
+              <Icon name="delete" size={30} color={Colors.dark} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[Common.chatMenuIcon]}
+              onPress={() => {
+                if (!isRecognizing) {
+                  return onStartRecord();
+                }
+
+                onStopRecord();
+              }}
+            >
+              <Icon
+                name={!isRecognizing ? 'microphone' : 'pause-circle'}
+                color={Colors.error}
+                size={25}
+                type="font-awesome"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[Common.chatMenuIcon, Common.chatIcon]}
+              onPress={() => {
+                onSendMessage();
+                onStopRecord();
+              }}
+            >
+              <Icon name="send" color={Colors.light} size={25} />
+            </TouchableOpacity>
+          </View>
+        </Animatable.View>
+      )}
+
+      {chatToPost.length > 0 && !showVoiceRecorder && (
         <Animatable.View
           animation="fadeInUp"
           duration={500}
@@ -311,13 +464,7 @@ const Screen = ({ route }: AllScreenProps) => {
                   autoFocus
                 />
               </View>
-              <TouchableOpacity
-                style={[Common.chatIcon, Layout.center]}
-                onPress={onSendMessage}
-                disabled={!text}
-              >
-                <Icon name="send" color={Colors.light} size={25} />
-              </TouchableOpacity>
+              {renderActionIcons()}
             </View>
           </Animatable.View>
         </KeyboardAvoidingView>

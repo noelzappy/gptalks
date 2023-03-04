@@ -1,3 +1,4 @@
+import { Config } from '@/config';
 import { RootState } from '@/store';
 import {
   BaseQueryFn,
@@ -8,7 +9,7 @@ import {
 } from '@reduxjs/toolkit/query/react';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:3000/v1', // process.env.API_URL,
+  baseUrl: Config.API_URL,
   prepareHeaders: (headers, { getState }) => {
     const tokens = (getState() as RootState).auth.tokens;
 

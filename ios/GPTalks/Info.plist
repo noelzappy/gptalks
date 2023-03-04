@@ -72,5 +72,14 @@
 			<string>Fontisto.ttf</string>
 		</array>
 
+		<key>NSMicrophoneUsageDescription</key>
+		<string>
+			GPTalks uses the microphone to record your voice. This allows you to chat with ChatGPT with your voice
+		</string>
+		<key>NSSpeechRecognitionUsageDescription</key>
+		<string>
+			GPTalks uses speech recognition to convert your voice to text. This allows you to chat with ChatGPT with your voice
+		</string>
+
 	</dict>
 </plist>
