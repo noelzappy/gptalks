@@ -36,6 +36,7 @@ const Screen = () => {
         onPress={() => {
           navigate.navigate('Chat', { chatId: item.id, name: item.subject });
         }}
+        bottomDivider
       >
         <Avatar source={{ uri: 'https://picsum.photos/200' }} rounded />
         <ListItem.Content>
