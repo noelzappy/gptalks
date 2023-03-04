@@ -42,16 +42,18 @@ const Screen = () => {
           <ListItem.Title style={[Fonts.textRegular]} numberOfLines={1}>
             {item.subject}
           </ListItem.Title>
-          <ListItem.Subtitle style={[Fonts.textSmall]} numberOfLines={1}>
-            {item.user}
+          <ListItem.Subtitle
+            style={[
+              Fonts.textSmall,
+              {
+                fontSize: 12,
+              },
+            ]}
+            numberOfLines={1}
+          >
+            {moment(item.date).format('DD MMM YY')}
           </ListItem.Subtitle>
         </ListItem.Content>
-
-        <View>
-          <Text numberOfLines={1} style={[Fonts.textSmall]}>
-            {moment(item.date).format('DD MMM YY')}
-          </Text>
-        </View>
       </ListItem>
     );
   };

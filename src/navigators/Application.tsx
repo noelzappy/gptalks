@@ -28,7 +28,7 @@ const ApplicationNavigator = () => {
             name="Main"
             component={Main}
             options={{
-              title: 'Home',
+              title: 'Chats',
             }}
           />
           <Stack.Screen

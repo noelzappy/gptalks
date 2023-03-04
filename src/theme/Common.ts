@@ -60,6 +60,12 @@ export default function <C>({ Colors }: CommonParams<C>) {
         borderRadius: 50,
         marginLeft: 5,
       },
+      viewImage: {
+        backgroundColor: Colors.grayLighter,
+        borderRadius: 10,
+        padding: 10,
+        width: '100%',
+      },
     }),
   };
 }

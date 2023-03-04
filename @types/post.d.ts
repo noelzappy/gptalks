@@ -1,0 +1,11 @@
+import { User } from './auth';
+import { ChatMessage } from './chat';
+
+export type Post = {
+  id: string;
+  user: User;
+  date: string;
+  description: string;
+  prompt: ChatMessage;
+  response: ChatMessage;
+};

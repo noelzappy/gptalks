@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -102,7 +102,7 @@ const Screen = ({ route }: AllScreenProps) => {
     setText('');
   };
 
-  const renderItem: ListRenderItem<ChatMessage> = ({ item }) => {
+  const renderItem: ListRenderItem<ChatMessage> = useCallback(({ item }) => {
     return (
       <View
         style={[item.sender === 'user' ? Common.userBubble : Common.botBubble]}
@@ -119,7 +119,7 @@ const Screen = ({ route }: AllScreenProps) => {
         </Text>
       </View>
     );
-  };
+  }, []);
 
   return (
     <Wrapper scrollable={false}>
