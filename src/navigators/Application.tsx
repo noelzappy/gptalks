@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StatusBar, TouchableOpacity, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -25,18 +25,42 @@ const ApplicationNavigator = () => {
 
   const [showPlayer, setShowPlayer] = useState(false);
 
-  Tts.addEventListener('tts-start', () => {
-    setShowPlayer(true);
-  });
-  Tts.addEventListener('tts-progress', () => {
-    setShowPlayer(true);
-  });
-  Tts.addEventListener('tts-finish', () => {
-    setShowPlayer(false);
-  });
-  Tts.addEventListener('tts-cancel', () => {
-    setShowPlayer(false);
-  });
+  const initTts = async () => {
+    try {
+      const voices = await Tts.voices();
+      const availableVoices = voices
+        .filter(v => !v.networkConnectionRequired && !v.notInstalled)
+        .map(v => {
+          return { id: v.id, name: v.name, language: v.language };
+        })
+        .filter(v => v.language.startsWith('en'));
+
+      const randomIndex = Math.floor(Math.random() * availableVoices.length);
+
+      const defaultVoice = availableVoices[randomIndex];
+
+      if (defaultVoice) {
+        await Tts.setDefaultLanguage('en-US');
+        await Tts.setDefaultVoice(defaultVoice.id);
+      }
+    } catch (err) {}
+  };
+
+  useEffect(() => {
+    Tts.addEventListener('tts-start', () => {
+      setShowPlayer(true);
+    });
+    Tts.addEventListener('tts-progress', () => {
+      setShowPlayer(true);
+    });
+    Tts.addEventListener('tts-finish', () => {
+      setShowPlayer(false);
+    });
+    Tts.addEventListener('tts-cancel', () => {
+      setShowPlayer(false);
+    });
+    Tts.getInitStatus().then(initTts);
+  }, []);
 
   return (
     <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]}>
