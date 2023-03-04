@@ -56,7 +56,11 @@ const PostItem = ({ item, onPress }: Props) => {
             <Text style={[Fonts.textSmall]}>{item.description}</Text>
           </View>
 
-          <TouchableOpacity style={[Common.viewImage]} onPress={onCapture}>
+          <TouchableOpacity
+            style={[Common.viewImage]}
+            onPress={onCapture}
+            activeOpacity={0.8}
+          >
             <ViewShot
               ref={shotRef}
               options={{

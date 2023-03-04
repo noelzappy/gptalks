@@ -1,21 +1,31 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, FlatList, ListRenderItem } from 'react-native';
 import { useTheme } from '@/hooks';
-import { Wrapper } from '@/components';
+import { Wrapper, PostItem } from '@/components';
 import { AllScreenProps } from 'types/navigation';
+import { Post } from 'types/post';
 
-const Screen = ({ route }: AllScreenProps) => {
+const Screen = ({ route, navigation }: AllScreenProps) => {
   const { Fonts, Gutters, Layout } = useTheme();
 
   const { post } = route.params;
 
+  const renderItem: ListRenderItem<Post> = ({ item }) => {
+    return (
+      <PostItem
+        item={item}
+        onPress={() => navigation.navigate('Post', { post: item })}
+      />
+    );
+  };
+
   return (
-    <Wrapper>
-      <View style={[Layout.fullWidth, Gutters.smallVMargin]}>
-        <Text style={[Fonts.titleSmall, Gutters.smallBMargin]}>
-          {post.description}
-        </Text>
-      </View>
+    <Wrapper scrollable={false}>
+      <FlatList
+        ListHeaderComponent={() => {
+          return <PostItem item={post} onPress={() => {}} />;
+        }}
+      />
     </Wrapper>
   );
 };
