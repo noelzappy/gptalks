@@ -66,6 +66,18 @@ export default function <C>({ Colors }: CommonParams<C>) {
         padding: 10,
         width: '100%',
       },
+      chatMenu: {
+        borderWidth: 1,
+        borderColor: Colors.grayLighter,
+        borderRadius: 10,
+        padding: 5,
+      },
+      chatMenuIcon: {
+        backgroundColor: Colors.grayLighter,
+        borderRadius: 10,
+        padding: 5,
+        marginHorizontal: 5,
+      },
     }),
   };
 }

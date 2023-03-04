@@ -9,11 +9,12 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { useTheme } from '@/hooks';
-import { MessageSkeleton, Wrapper } from '@/components';
+import { ChatBubble, MessageSkeleton, Spacer, Wrapper } from '@/components';
 import { AllScreenProps } from 'types/navigation';
 import socket from '@/services/socket';
 import { ChatMessage } from 'types/chat';
 import { Icon } from '@rneui/base';
+import * as Animatable from 'react-native-animatable';
 
 const Screen = ({ route }: AllScreenProps) => {
   const { Fonts, Gutters, Layout, Common, Colors } = useTheme();
@@ -103,29 +104,14 @@ const Screen = ({ route }: AllScreenProps) => {
   };
 
   const renderItem: ListRenderItem<ChatMessage> = useCallback(({ item }) => {
-    return (
-      <View
-        style={[item.sender === 'user' ? Common.userBubble : Common.botBubble]}
-      >
-        <Text
-          style={[
-            Fonts.textSmall,
-            {
-              color: item.sender === 'user' ? Colors.light : Colors.dark,
-            },
-          ]}
-        >
-          {item.message}
-        </Text>
-      </View>
-    );
+    return <ChatBubble item={item} />;
   }, []);
 
   return (
     <Wrapper scrollable={false}>
       <FlatList
         ref={flatListRef}
-        data={messages}
+        data={[...messages].reverse()}
         renderItem={renderItem}
         ListEmptyComponent={() => {
           if (isLoading) return <MessageSkeleton />;
@@ -135,22 +121,23 @@ const Screen = ({ route }: AllScreenProps) => {
         keyExtractor={item => item.id}
         contentContainerStyle={[
           {
-            flexDirection: 'column-reverse',
             paddingBottom: 30,
             paddingHorizontal: 5,
           },
         ]}
         inverted
-        ListFooterComponent={() => {
+        ListHeaderComponent={() => {
           if (isTyping)
             return (
-              <View
+              <Animatable.View
                 style={[
                   Common.botBubble,
                   {
                     backgroundColor: Colors.grayLighter,
                   },
                 ]}
+                animation="fadeIn"
+                duration={500}
               >
                 <Text
                   style={[
@@ -163,10 +150,10 @@ const Screen = ({ route }: AllScreenProps) => {
                 >
                   Typing...
                 </Text>
-              </View>
+              </Animatable.View>
             );
 
-          return null;
+          return <Spacer size={10} />;
         }}
       />
       <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100}>

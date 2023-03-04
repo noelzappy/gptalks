@@ -5,6 +5,7 @@ import { Post } from 'types/post';
 import { Avatar, ListItem } from '@rneui/base';
 import ImageView from 'react-native-image-viewing';
 import ViewShot from 'react-native-view-shot';
+import ChatBubble from './ChatBubble';
 
 type Props = {
   item: Post;
@@ -12,14 +13,13 @@ type Props = {
 };
 
 const PostItem = ({ item, onPress }: Props) => {
-  const { Fonts, Common, Colors } = useTheme();
+  const { Fonts, Common } = useTheme();
 
   const shotRef = useRef<any>(null);
   const [showImagViewer, setShowImagViewer] = useState(false);
   const [imageUri, setImageUri] = useState(undefined);
 
   const onCapture = () => {
-    console.log('onCapture');
     shotRef.current?.capture().then((uri: any) => {
       setImageUri(uri);
       setShowImagViewer(true);
@@ -69,32 +69,15 @@ const PostItem = ({ item, onPress }: Props) => {
                 quality: 0.9,
               }}
             >
-              <View style={[Common.userBubble]}>
-                <Text
-                  style={[
-                    Fonts.textSmall,
-                    {
-                      fontSize: 12,
-                      color: Colors.light,
-                    },
-                  ]}
-                >
-                  {item.prompt.message}
-                </Text>
-              </View>
-
-              <View style={[Common.botBubble]}>
-                <Text
-                  style={[
-                    Fonts.textSmall,
-                    {
-                      fontSize: 12,
-                      color: Colors.dark,
-                    },
-                  ]}
-                >
-                  {item.response.message}
-                </Text>
+              <View
+                style={[
+                  {
+                    padding: 5,
+                  },
+                ]}
+              >
+                <ChatBubble item={item.prompt} showSender disabled />
+                <ChatBubble item={item.response} showSender disabled />
               </View>
             </ViewShot>
           </TouchableOpacity>
