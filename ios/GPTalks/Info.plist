@@ -71,6 +71,7 @@
 			<string>Zocial.ttf</string>
 			<string>Fontisto.ttf</string>
 		</array>
-
+		<key>NSMicrophoneUsageDescription</key>
+		<string>Give $(PRODUCT_NAME) permission to use your microphone. Your record wont be shared without your permission.</string>
 	</dict>
 </plist>

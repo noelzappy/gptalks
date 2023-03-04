@@ -39,6 +39,7 @@
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-GPTalks-GPTalksTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GPTalks-GPTalksTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-GPTalks.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GPTalks.debug.xcconfig"; path = "Target Support Files/Pods-GPTalks/Pods-GPTalks.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-GPTalks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GPTalks.release.xcconfig"; path = "Target Support Files/Pods-GPTalks/Pods-GPTalks.release.xcconfig"; sourceTree = "<group>"; };
+		5910114129B3844E00350D73 /* GPTalks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GPTalks-Bridging-Header.h"; sourceTree = "<group>"; };
 		59871D8D29B1726F00EE6055 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		59871D8E29B1726F00EE6055 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		59871D8F29B1726F00EE6055 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
@@ -109,6 +110,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				5910114129B3844E00350D73 /* GPTalks-Bridging-Header.h */,
 			);
 			name = GPTalks;
 			sourceTree = "<group>";
