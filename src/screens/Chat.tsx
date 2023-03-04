@@ -1,13 +1,21 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, FlatList, ListRenderItem } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  ListRenderItem,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { useTheme } from '@/hooks';
 import { MessageSkeleton, Wrapper } from '@/components';
 import { AllScreenProps } from 'types/navigation';
 import socket from '@/services/socket';
 import { ChatMessage } from 'types/chat';
-import { Input } from '@rneui/base';
+import { Icon } from '@rneui/base';
 
-const Screen = ({ route, navigation }: AllScreenProps) => {
+const Screen = ({ route }: AllScreenProps) => {
   const { Fonts, Gutters, Layout, Common, Colors } = useTheme();
   const { chatId } = route.params;
 
@@ -15,14 +23,11 @@ const Screen = ({ route, navigation }: AllScreenProps) => {
   const [text, setText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [inputHeight, setInputHeight] = useState<number>(40);
 
   const io = socket();
 
   const flatListRef = useRef<FlatList<ChatMessage>>(null);
-
-  const goToBottom = () => {
-    flatListRef.current?.scrollToEnd({ animated: true });
-  };
 
   useEffect(() => {
     io.on('connect_error', () => {
@@ -79,6 +84,8 @@ const Screen = ({ route, navigation }: AllScreenProps) => {
   }, []);
 
   const onSendMessage = () => {
+    const lastMsgIndex = messages.length - 1;
+
     const message: ChatMessage = {
       chat: chatId,
       message: text,
@@ -87,13 +94,12 @@ const Screen = ({ route, navigation }: AllScreenProps) => {
       id: 'new_local_msg',
       user: 'me',
       read: true,
-      parentMessageId: messages[0]?.parentMessageId,
+      parentMessageId: messages[lastMsgIndex]?.parentMessageId,
     };
     io.emit('message', message);
     setMessages(prev => [...prev, message]);
 
     setText('');
-    goToBottom();
   };
 
   const renderItem: ListRenderItem<ChatMessage> = ({ item }) => {
@@ -163,18 +169,57 @@ const Screen = ({ route, navigation }: AllScreenProps) => {
           return null;
         }}
       />
-
-      <Input
-        value={text}
-        onChangeText={setText}
-        rightIcon={{ type: 'material', name: 'send', onPress: onSendMessage }}
-        inputContainerStyle={[Common.input]}
-        placeholder="Type a message"
-        multiline
-        numberOfLines={6}
-        onEndEditing={onSendMessage}
-        onSubmitEditing={onSendMessage}
-      />
+      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100}>
+        <View
+          style={[
+            Layout.row,
+            Layout.justifyContentBetween,
+            Layout.alignItemsCenter,
+            {
+              paddingHorizontal: 5,
+            },
+          ]}
+        >
+          <View
+            style={[
+              Common.chatInput,
+              Layout.fill,
+              Layout.center,
+              {
+                height: inputHeight > 40 ? inputHeight + 10 : 48,
+                maxHeight: 110,
+                borderRadius: inputHeight > 40 ? 20 : 30,
+              },
+            ]}
+          >
+            <TextInput
+              placeholder="Type a message"
+              value={text}
+              onChangeText={setText}
+              style={[
+                Layout.fullWidth,
+                Gutters.smallHPadding,
+                Fonts.textSmall,
+                {
+                  maxHeight: 100,
+                },
+              ]}
+              multiline
+              numberOfLines={6}
+              onContentSizeChange={e => {
+                setInputHeight(e.nativeEvent.contentSize.height);
+              }}
+            />
+          </View>
+          <TouchableOpacity
+            style={[Common.chatIcon, Layout.center]}
+            onPress={onSendMessage}
+            disabled={!text}
+          >
+            <Icon name="send" color={Colors.light} size={25} />
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     </Wrapper>
   );
 };

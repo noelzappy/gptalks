@@ -49,6 +49,17 @@ export default function <C>({ Colors }: CommonParams<C>) {
         marginVertical: 10,
         alignSelf: 'flex-start',
       },
+      chatInput: {
+        backgroundColor: Colors.grayLight,
+        height: 45,
+        borderRadius: 50,
+      },
+      chatIcon: {
+        backgroundColor: Colors.primary,
+        padding: 10,
+        borderRadius: 50,
+        marginLeft: 5,
+      },
     }),
   };
 }
