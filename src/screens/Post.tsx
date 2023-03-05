@@ -13,8 +13,8 @@ import { postApi, useCreatePostReplyMutation } from '@/services/modules/posts';
 import { Input, LinearProgress } from '@rneui/base';
 import { useToast } from 'react-native-toast-notifications';
 
-const Screen = ({ route, navigation }: AllScreenProps) => {
-  const { Fonts, Gutters, Layout, Colors } = useTheme();
+const Screen = ({ route }: AllScreenProps) => {
+  const { Colors } = useTheme();
 
   const toast = useToast();
 

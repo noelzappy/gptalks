@@ -20,6 +20,7 @@ const ReplyItem = ({ item, onPress }: Props) => {
         },
       ]}
       onPress={onPress}
+      disabled
     >
       <View
         style={[Layout.row, Layout.alignItemsCenter, Gutters.regularTMargin]}
