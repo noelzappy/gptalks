@@ -9,6 +9,16 @@ type Post = {
   response: string;
 };
 
+type PostReply = {
+  text: string;
+  parentReply?: string;
+  post: string;
+};
+
+type ReplyPayload = PagedPayload & {
+  post: string;
+};
+
 export const postApi = api.injectEndpoints({
   endpoints: build => ({
     getPosts: build.query<Response, PagedPayload>({
@@ -28,8 +38,32 @@ export const postApi = api.injectEndpoints({
         body: { description, prompt, response },
       }),
     }),
+
+    createPostReply: build.mutation<Response, PostReply>({
+      query: ({ text, parentReply, post }) => ({
+        url: '/replies',
+        method: 'POST',
+        body: { text, parentReply, post },
+      }),
+    }),
+
+    getPostReplies: build.query<Response, ReplyPayload>({
+      query: (params: ReplyPayload) => {
+        const reqParams = new URLSearchParams(params as any);
+        return {
+          url: `/replies?${reqParams.toString()}`,
+          method: 'GET',
+        };
+      },
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetPostsQuery, useCreatePostMutation } = postApi;
+export const {
+  useGetPostsQuery,
+  useCreatePostMutation,
+
+  useCreatePostReplyMutation,
+  useGetPostRepliesQuery,
+} = postApi;

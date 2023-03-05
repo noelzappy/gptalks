@@ -12,8 +12,10 @@ type GetResultTypeFromEndpoint<Endpoint> = Endpoint extends QueryHooks<
   : never;
 
 interface UseInfiniteQueryOptions {
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
+  chat?: string;
+  post?: string;
 }
 
 export function useInfiniteQuery<

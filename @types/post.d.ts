@@ -9,3 +9,12 @@ export type Post = {
   prompt: ChatMessage;
   response: ChatMessage;
 };
+
+export type PostReply = {
+  id: string;
+  user: User;
+  date: string;
+  text: string;
+  parentReply?: string;
+  post: string;
+};

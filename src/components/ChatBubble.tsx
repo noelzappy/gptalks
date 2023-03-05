@@ -17,6 +17,7 @@ type Props = {
   disabled?: boolean;
   onShare?: (item: ChatMessage) => void;
   selected?: boolean;
+  fontSize?: number;
 };
 
 const ChatBubble = ({
@@ -25,6 +26,7 @@ const ChatBubble = ({
   disabled,
   onShare,
   selected,
+  fontSize,
 }: Props) => {
   const { Fonts, Common, Colors, Layout } = useTheme();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -102,6 +104,7 @@ const ChatBubble = ({
               {
                 color,
                 marginBottom: 5,
+                fontSize: 12,
               },
               Fonts.textBold,
             ]}
@@ -116,6 +119,7 @@ const ChatBubble = ({
             Fonts.textSmall,
             {
               color,
+              fontSize,
             },
           ]}
         >
@@ -213,6 +217,7 @@ ChatBubble.defaultProps = {
   disabled: false,
   onShare: () => {},
   selected: false,
+  fontSize: 14,
 };
 
 export default ChatBubble;
