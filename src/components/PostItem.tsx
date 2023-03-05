@@ -77,8 +77,18 @@ const PostItem = ({ item, onPress }: Props) => {
                   },
                 ]}
               >
-                <ChatBubble item={item.prompt} showSender disabled />
-                <ChatBubble item={item.response} showSender disabled />
+                <ChatBubble
+                  item={item.prompt}
+                  showSender
+                  disabled
+                  noAnimation
+                />
+                <ChatBubble
+                  item={item.response}
+                  showSender
+                  disabled
+                  noAnimation
+                />
               </View>
             </ViewShot>
           </TouchableOpacity>
