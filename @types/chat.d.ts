@@ -1,3 +1,5 @@
+import { Asset } from 'react-native-image-picker';
+
 export type Chat = {
   id: string;
   subject: string;
@@ -33,3 +35,5 @@ export type ChatMessage = {
   read: boolean;
   parentMessageId?: string;
 };
+
+export type ImageData = Asset;

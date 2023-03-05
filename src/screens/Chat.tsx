@@ -12,8 +12,8 @@ import { useTheme } from '@/hooks';
 import { ChatBubble, MessageSkeleton, Spacer, Wrapper } from '@/components';
 import { AllScreenProps } from 'types/navigation';
 import socket from '@/services/socket';
-import { ChatMessage } from 'types/chat';
-import { Icon, LinearProgress } from '@rneui/base';
+import { ChatMessage, ImageData } from 'types/chat';
+import { Icon, Image, LinearProgress } from '@rneui/base';
 import * as Animatable from 'react-native-animatable';
 import { SheetManager } from 'react-native-actions-sheet';
 import { useToast } from 'react-native-toast-notifications';
@@ -21,6 +21,8 @@ import Voice, {
   SpeechResultsEvent,
   SpeechErrorEvent,
 } from '@react-native-voice/voice';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { callGoogleVisionAsync } from '@/helpers/Chat';
 
 const Screen = ({ route }: AllScreenProps) => {
   const { Fonts, Gutters, Layout, Common, Colors } = useTheme();
@@ -34,12 +36,11 @@ const Screen = ({ route }: AllScreenProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [inputHeight, setInputHeight] = useState<number>(40);
   const [chatToPost, setChatToPost] = useState<ChatMessage[]>([]);
-  const [sentMessage, setSentMessage] = useState<ChatMessage | undefined>(
-    undefined,
-  );
-
   const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
   const [isRecognizing, setIsRecognizing] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<ImageData | undefined>(
+    undefined,
+  );
 
   const io = socket();
 
@@ -142,7 +143,6 @@ const Screen = ({ route }: AllScreenProps) => {
 
     io.on('message', (data: ChatMessage) => {
       setMessages(prev => [...prev, data]);
-      setSentMessage(undefined);
     });
 
     return () => {
@@ -221,6 +221,68 @@ const Screen = ({ route }: AllScreenProps) => {
     setText('');
   };
 
+  const onProcessImage = async (img: ImageData) => {
+    try {
+      const response = await callGoogleVisionAsync(img);
+      const extractedText = response.responses[0].fullTextAnnotation;
+      if (!extractedText) {
+        toast.show('We could not extract text from your image');
+        setSelectedImage(undefined);
+        return;
+      }
+
+      setText(extractedText.text);
+      setSelectedImage(undefined);
+    } catch (e) {
+      toast.show('Something went wrong while processing your image');
+    }
+  };
+
+  const onTakePhoto = async () => {
+    try {
+      const result = await launchCamera({
+        mediaType: 'photo',
+        includeBase64: true,
+      });
+
+      if (result.didCancel) {
+        return;
+      }
+
+      if (result.assets && result.assets.length > 0) {
+        const asset = result.assets[0];
+        onProcessImage(asset);
+        setSelectedImage(asset);
+        return;
+      }
+      toast.show('Something went wrong while taking your photo');
+    } catch (e) {
+      toast.show('We could not access your camera');
+    }
+  };
+
+  const onPickImage = async () => {
+    try {
+      const result = await launchImageLibrary({
+        mediaType: 'photo',
+        includeBase64: true,
+      });
+
+      if (result.didCancel) {
+        return;
+      }
+      if (result.assets && result.assets.length > 0) {
+        const asset = result.assets[0];
+        onProcessImage(asset);
+        setSelectedImage(asset);
+        return;
+      }
+      toast.show('Something went wrong while picking your image');
+    } catch (e) {
+      toast.show('We could not access your gallery');
+    }
+  };
+
   const renderItem: ListRenderItem<ChatMessage> = ({ item }) => {
     return (
       <ChatBubble
@@ -228,6 +290,27 @@ const Screen = ({ route }: AllScreenProps) => {
         onShare={onPostChat}
         selected={isSelected(item)}
       />
+    );
+  };
+
+  const renderImageOption = () => {
+    if (text) return null;
+
+    return (
+      <TouchableOpacity
+        style={[
+          Common.chatIcon,
+          Layout.center,
+          {
+            marginLeft: 0,
+            marginRight: 10,
+          },
+        ]}
+        onLongPress={onPickImage}
+        onPress={onTakePhoto}
+      >
+        <Icon name="camera" color={Colors.light} size={25} type="feather" />
+      </TouchableOpacity>
     );
   };
 
@@ -289,7 +372,25 @@ const Screen = ({ route }: AllScreenProps) => {
         ListHeaderComponent={() => {
           return (
             <View>
-              {sentMessage && <ChatBubble item={sentMessage} disabled />}
+              {selectedImage && (
+                <View
+                  style={[
+                    {
+                      alignItems: 'flex-end',
+                    },
+                  ]}
+                >
+                  <Image
+                    source={{ uri: selectedImage.uri }}
+                    style={{ width: 170, height: 170, borderRadius: 10 }}
+                    resizeMode="cover"
+                  />
+                  <LinearProgress
+                    color={Colors.primary}
+                    style={{ width: 170, height: 5, borderRadius: 10 }}
+                  />
+                </View>
+              )}
 
               {isTyping && (
                 <Animatable.View
@@ -432,6 +533,7 @@ const Screen = ({ route }: AllScreenProps) => {
                 },
               ]}
             >
+              {renderImageOption()}
               <View
                 style={[
                   Common.chatInput,
