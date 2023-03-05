@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text } from 'react-native';
-import { useDispatch } from 'react-redux';
 import { useTheme } from '@/hooks';
 import { Brand, Spacer, Wrapper } from '@/components';
 import { Button, Input } from '@rneui/base';
@@ -8,7 +7,6 @@ import { ApplicationScreenProps } from 'types/navigation';
 
 const Screen = ({}: ApplicationScreenProps) => {
   const { Fonts, Gutters, Layout, Common, Colors } = useTheme();
-  const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
 
@@ -33,6 +31,7 @@ const Screen = ({}: ApplicationScreenProps) => {
           value={email.toLocaleLowerCase()}
           onChangeText={setEmail}
           autoCapitalize="none"
+          inputStyle={{ color: Colors.dark }}
         />
 
         <Spacer size={20} />

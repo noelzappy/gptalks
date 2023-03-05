@@ -76,6 +76,7 @@ const Screen = ({}: ApplicationScreenProps) => {
           value={name}
           onChangeText={setName}
           autoCapitalize="none"
+          inputStyle={{ color: Colors.dark }}
         />
 
         <Input
@@ -91,6 +92,7 @@ const Screen = ({}: ApplicationScreenProps) => {
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
+          inputStyle={{ color: Colors.dark }}
         />
 
         <Input
@@ -112,6 +114,7 @@ const Screen = ({}: ApplicationScreenProps) => {
             onPress: () => setShowPassword(!showPassword),
             iconStyle: Common.icon,
           }}
+          inputStyle={{ color: Colors.dark }}
         />
 
         <Spacer size={20} />

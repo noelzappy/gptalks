@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Chats, Explores } from '@/screens';
+import { Chats, Explores, Profile } from '@/screens';
 import { Icon } from '@rneui/base';
 import { useTheme } from '@/hooks';
 
@@ -15,6 +15,16 @@ function getIcon(iconName: string, size: number, color: string) {
 
     case 'Explores':
       return <Icon name="explore" size={size} color={color} type="material" />;
+
+    case 'Profile':
+      return (
+        <Icon
+          name="user-circle"
+          size={size}
+          color={color}
+          type="font-awesome"
+        />
+      );
 
     default:
       return (
@@ -45,6 +55,7 @@ const MainNavigator = () => {
     >
       <Tab.Screen name="Home" component={Chats} />
       <Tab.Screen name="Explores" component={Explores} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 };

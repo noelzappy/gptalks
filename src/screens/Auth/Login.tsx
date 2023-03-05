@@ -75,6 +75,7 @@ const Screen = ({ navigation }: ApplicationScreenProps) => {
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
+          inputStyle={{ color: Colors.dark }}
         />
         <Input
           placeholder="Password"
@@ -95,6 +96,7 @@ const Screen = ({ navigation }: ApplicationScreenProps) => {
             onPress: () => setShowPassword(!showPassword),
             iconStyle: Common.icon,
           }}
+          inputStyle={{ color: Colors.dark }}
         />
 
         <TouchableOpacity
