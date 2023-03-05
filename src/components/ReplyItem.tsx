@@ -10,7 +10,7 @@ type Props = {
 };
 
 const ReplyItem = ({ item, onPress }: Props) => {
-  const { Fonts, Layout, Gutters } = useTheme();
+  const { Fonts, Layout, Gutters, Common } = useTheme();
 
   return (
     <TouchableOpacity
@@ -61,6 +61,7 @@ const ReplyItem = ({ item, onPress }: Props) => {
           {
             alignItems: 'stretch',
           },
+          Common.backgroundReset,
         ]}
       >
         <View />

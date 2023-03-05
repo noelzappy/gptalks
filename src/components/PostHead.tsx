@@ -61,7 +61,11 @@ const PostHead = ({ item, onPress }: Props) => {
         </View>
       </View>
 
-      <ListItem bottomDivider onPress={onPress}>
+      <ListItem
+        bottomDivider
+        onPress={onPress}
+        containerStyle={[Common.backgroundReset]}
+      >
         <ListItem.Content>
           <View
             style={[
@@ -98,12 +102,14 @@ const PostHead = ({ item, onPress }: Props) => {
                   showSender
                   disabled
                   fontSize={13}
+                  noAnimation
                 />
                 <ChatBubble
                   item={item.response}
                   showSender
                   disabled
                   fontSize={13}
+                  noAnimation
                 />
               </View>
             </ViewShot>

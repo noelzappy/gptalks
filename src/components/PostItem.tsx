@@ -34,6 +34,7 @@ const PostItem = ({ item, onPress }: Props) => {
           {
             alignItems: 'stretch',
           },
+          Common.backgroundReset,
         ]}
         onPress={onPress}
       >

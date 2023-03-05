@@ -13,7 +13,7 @@ import { ChatMessage } from 'types/chat';
 
 function CreatePostSheet(props: SheetProps) {
   const [description, setDescription] = useState('');
-  const { Common, Gutters, Layout, Fonts } = useTheme();
+  const { Common, Gutters, Layout, Fonts, Colors } = useTheme();
 
   const chatToPost: ChatMessage[] = props.payload?.chatToPost;
 
@@ -51,6 +51,9 @@ function CreatePostSheet(props: SheetProps) {
           </Text>
         </View>
       }
+      containerStyle={{
+        backgroundColor: Colors.light,
+      }}
     >
       <View style={[Gutters.regularHPadding, Gutters.regularBPadding]}>
         <Input
@@ -61,6 +64,7 @@ function CreatePostSheet(props: SheetProps) {
           autoFocus
           multiline
           numberOfLines={4}
+          inputStyle={{ color: Colors.dark }}
         />
 
         <Button

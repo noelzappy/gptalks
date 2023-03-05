@@ -25,7 +25,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { callGoogleVisionAsync } from '@/helpers/Chat';
 
 const Screen = ({ route }: AllScreenProps) => {
-  const { Fonts, Gutters, Layout, Common, Colors } = useTheme();
+  const { Fonts, Gutters, Layout, Common, Colors, darkMode } = useTheme();
   const { chatId } = route.params;
 
   const toast = useToast();
@@ -397,7 +397,9 @@ const Screen = ({ route }: AllScreenProps) => {
                   style={[
                     Common.botBubble,
                     {
-                      backgroundColor: Colors.grayLighter,
+                      backgroundColor: darkMode
+                        ? Colors.dark
+                        : Colors.grayLighter,
                     },
                   ]}
                   animation="fadeIn"
@@ -407,7 +409,7 @@ const Screen = ({ route }: AllScreenProps) => {
                     style={[
                       Fonts.textBold,
                       {
-                        color: Colors.dark,
+                        color: darkMode ? Colors.light : Colors.dark,
                         fontStyle: 'italic',
                       },
                     ]}
@@ -516,7 +518,12 @@ const Screen = ({ route }: AllScreenProps) => {
             onPress={() => setChatToPost([])}
             style={[Common.chatMenuIcon]}
           >
-            <Icon name="closecircleo" type="antdesign" size={30} />
+            <Icon
+              name="closecircleo"
+              type="antdesign"
+              size={30}
+              color={Colors.dark}
+            />
           </TouchableOpacity>
         </Animatable.View>
       )}
@@ -564,6 +571,7 @@ const Screen = ({ route }: AllScreenProps) => {
                     setInputHeight(e.nativeEvent.contentSize.height);
                   }}
                   autoFocus
+                  placeholderTextColor={Colors.dark}
                 />
               </View>
               {renderActionIcons()}

@@ -18,6 +18,7 @@ type Props = {
   onShare?: (item: ChatMessage) => void;
   selected?: boolean;
   fontSize?: number;
+  noAnimation?: boolean;
 };
 
 const ChatBubble = ({
@@ -27,6 +28,7 @@ const ChatBubble = ({
   onShare,
   selected,
   fontSize,
+  noAnimation,
 }: Props) => {
   const { Fonts, Common, Colors, Layout } = useTheme();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -79,8 +81,10 @@ const ChatBubble = ({
     Tts.speak(item.message);
   };
 
+  const Component = noAnimation ? View : Animatable.View;
+
   return (
-    <Animatable.View
+    <Component
       animation={item.sender === 'user' ? 'bounceInRight' : 'bounceInLeft'}
       duration={300}
     >
@@ -127,7 +131,7 @@ const ChatBubble = ({
         </Text>
 
         {showTooltip && (
-          <Animatable.View
+          <Component
             style={[
               {
                 alignItems: alignment,
@@ -184,10 +188,15 @@ const ChatBubble = ({
                   onPress();
                 }}
               >
-                <Icon name="playcircleo" type="antdesign" size={30} />
+                <Icon
+                  name="playcircleo"
+                  type="antdesign"
+                  size={30}
+                  color={Colors.dark}
+                />
               </TouchableOpacity>
             </View>
-          </Animatable.View>
+          </Component>
         )}
 
         {selected && (
@@ -208,7 +217,7 @@ const ChatBubble = ({
       </TouchableOpacity>
 
       {renderTime()}
-    </Animatable.View>
+    </Component>
   );
 };
 
@@ -218,6 +227,7 @@ ChatBubble.defaultProps = {
   onShare: () => {},
   selected: false,
   fontSize: 14,
+  noAnimation: false,
 };
 
 export default ChatBubble;

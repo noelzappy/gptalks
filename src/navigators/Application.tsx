@@ -18,7 +18,8 @@ const Stack = createStackNavigator<ApplicationStackParamList>();
 
 // @refresh reset
 const ApplicationNavigator = () => {
-  const { darkMode, NavigationTheme, Layout, Gutters, Colors } = useTheme();
+  const { darkMode, NavigationTheme, Layout, Gutters, Colors, Fonts } =
+    useTheme();
   const { colors } = NavigationTheme;
 
   useFlipper(navigationRef);
@@ -80,7 +81,7 @@ const ApplicationNavigator = () => {
               type="entypo"
             />
 
-            <Text>Reading a conversation ...</Text>
+            <Text style={[Fonts.textSmall]}>Reading a conversation ...</Text>
             <TouchableOpacity
               onPress={() => {
                 Tts.stop();

@@ -12,7 +12,7 @@ import { useToast } from 'react-native-toast-notifications';
 
 function CreateChatSheet(props: SheetProps) {
   const [subject, setSubject] = useState('');
-  const { Common, Gutters, Layout, Fonts } = useTheme();
+  const { Common, Gutters, Layout, Fonts, Colors } = useTheme();
 
   const [createChat, { isLoading, error, data }] = useCreateChatMutation();
   const toast = useToast();
@@ -42,6 +42,9 @@ function CreateChatSheet(props: SheetProps) {
           </Text>
         </View>
       }
+      containerStyle={{
+        backgroundColor: Colors.light,
+      }}
     >
       <View style={[Gutters.regularHPadding, Gutters.regularBPadding]}>
         <Input
@@ -50,6 +53,7 @@ function CreateChatSheet(props: SheetProps) {
           value={subject}
           onChangeText={setSubject}
           autoFocus
+          inputStyle={{ color: Colors.dark }}
         />
 
         <Button

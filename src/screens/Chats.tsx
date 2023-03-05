@@ -17,7 +17,7 @@ import { chatApi } from '@/services/modules/chat';
 import { SheetManager } from 'react-native-actions-sheet';
 
 const Screen = () => {
-  const { Fonts, Colors, Images, Layout, Gutters } = useTheme();
+  const { Fonts, Colors, Images, Layout, Gutters, Common } = useTheme();
 
   const navigate = useNavigation<Nav>();
 
@@ -37,6 +37,7 @@ const Screen = () => {
           navigate.navigate('Chat', { chatId: item.id, name: item.subject });
         }}
         bottomDivider
+        containerStyle={[Common.backgroundReset]}
       >
         <Avatar source={{ uri: 'https://picsum.photos/200' }} rounded />
         <ListItem.Content>

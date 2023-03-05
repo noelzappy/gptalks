@@ -87,6 +87,7 @@ const Screen = ({ route }: AllScreenProps) => {
             type: 'material-community',
           }}
           disabled={isLoading}
+          inputStyle={{ color: Colors.dark }}
         />
         {isLoading && <LinearProgress color={Colors.primary} />}
       </KeyboardAvoidingView>
