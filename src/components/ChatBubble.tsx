@@ -114,7 +114,7 @@ const ChatBubble = ({
             ]}
             numberOfLines={1}
           >
-            {item.sender === 'user' ? user?.name : 'ChatGPT'}
+            {item.sender === 'user' ? 'Anonymous' : 'ChatGPT'}
           </Text>
         )}
 
