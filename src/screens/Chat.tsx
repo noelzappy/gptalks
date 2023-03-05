@@ -251,8 +251,8 @@ const Screen = ({ route }: AllScreenProps) => {
 
       if (result.assets && result.assets.length > 0) {
         const asset = result.assets[0];
-        onProcessImage(asset);
         setSelectedImage(asset);
+        onProcessImage(asset);
         return;
       }
       toast.show('Something went wrong while taking your photo');
@@ -273,8 +273,8 @@ const Screen = ({ route }: AllScreenProps) => {
       }
       if (result.assets && result.assets.length > 0) {
         const asset = result.assets[0];
-        onProcessImage(asset);
         setSelectedImage(asset);
+        onProcessImage(asset);
         return;
       }
       toast.show('Something went wrong while picking your image');
