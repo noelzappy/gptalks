@@ -4,6 +4,7 @@ export type User = {
   email: string;
   role: string;
   isEmailVerified: boolean;
+  avatar: string;
 };
 
 type Token = {
@@ -17,13 +18,13 @@ export type Tokens = {
 };
 
 export type AuthState = {
-  user: User | null;
-  tokens: Tokens | null;
+  user: User | undefined | null;
+  tokens: Tokens | undefined | null;
 };
 
 export type AuthPayload = {
   payload: {
-    user: User;
-    tokens: Tokens;
+    user?: User;
+    tokens?: Tokens;
   };
 };

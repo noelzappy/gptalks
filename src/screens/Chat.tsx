@@ -392,6 +392,27 @@ const Screen = ({ route }: AllScreenProps) => {
                 </View>
               )}
 
+              {!isLoading && messages.length === 0 && (
+                <View
+                  style={[
+                    Layout.center,
+                    {
+                      backgroundColor: Colors.grayLighter,
+                      borderRadius: 10,
+                    },
+                    Gutters.smallHMargin,
+                    Gutters.smallPadding,
+                  ]}
+                >
+                  <Text style={[Fonts.textCenter, Fonts.textRegular]}>
+                    Start a conversation by typing a message or by clicking on
+                    the microphone icon to record a voice message or by clicking
+                    on the camera icon to take a photo or pick an image that
+                    contains the message you want to send.
+                  </Text>
+                </View>
+              )}
+
               {isTyping && (
                 <Animatable.View
                   style={[

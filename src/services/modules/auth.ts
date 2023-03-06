@@ -2,6 +2,8 @@ import { api } from '@/services/api';
 
 type AuthResponse = any;
 
+type UpdateProfilePayload = any;
+
 export const authApi = api.injectEndpoints({
   endpoints: build => ({
     login: build.mutation<AuthResponse, { email: string; password: string }>({
@@ -30,9 +32,24 @@ export const authApi = api.injectEndpoints({
         body: { refreshToken },
       }),
     }),
+
+    updateProfile: build.mutation<AuthResponse, UpdateProfilePayload>({
+      query: payload => ({
+        url: '/users/me',
+        method: 'PUT',
+        body: payload,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }),
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation } =
-  authApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useLogoutMutation,
+  useUpdateProfileMutation,
+} = authApi;

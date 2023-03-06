@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StatusBar, TouchableOpacity, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { Startup, Chat, Post } from '@/screens';
+import { Startup, Chat, Post, EditProfile } from '@/screens';
 import { useTheme } from '@/hooks';
 import { useFlipper } from '@react-navigation/devtools';
 import Tts from 'react-native-tts';
@@ -108,7 +108,7 @@ const ApplicationNavigator = () => {
             name="Main"
             component={Main}
             options={{
-              title: 'Chats',
+              title: 'Back',
             }}
           />
           <Stack.Screen
@@ -122,6 +122,14 @@ const ApplicationNavigator = () => {
           <Stack.Screen
             name="Post"
             component={Post}
+            options={{
+              title: 'Post',
+              headerShown: true,
+            }}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfile}
             options={{
               title: 'Post',
               headerShown: true,

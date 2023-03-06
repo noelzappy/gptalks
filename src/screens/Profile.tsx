@@ -7,9 +7,10 @@ import { Avatar, Button } from '@rneui/base';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { clearCredentials } from '@/store/auth';
+import { getImageUrl } from '@/utils/misc';
 
-const Screen = ({}: AllScreenProps) => {
-  const { Fonts, Layout, Common } = useTheme();
+const Screen = ({ navigation }: AllScreenProps) => {
+  const { Fonts, Layout, Common, Colors, Gutters } = useTheme();
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
@@ -36,7 +37,7 @@ const Screen = ({}: AllScreenProps) => {
       <View style={[Layout.fullWidth, Layout.center]}>
         <Avatar
           size={100}
-          source={{ uri: 'https://picsum.photos/200/300' }}
+          source={{ uri: getImageUrl(user?.avatar || '') }}
           rounded
         />
       </View>
@@ -46,9 +47,28 @@ const Screen = ({}: AllScreenProps) => {
         {user?.name}
       </Text>
 
-      <Spacer size={50} />
+      <Text style={[Fonts.textCenter, Fonts.textSmall]}>{user?.email}</Text>
 
-      <Button title="Logout" onPress={onLogout} buttonStyle={[Common.button]} />
+      <Spacer size={50} />
+      <Button
+        title="Edit Profile"
+        onPress={() => {
+          navigation.navigate('EditProfile');
+        }}
+        buttonStyle={[Common.button]}
+      />
+      <Spacer size={100} />
+      <Button
+        title="Logout"
+        onPress={onLogout}
+        buttonStyle={[
+          Common.button,
+          {
+            backgroundColor: Colors.error,
+          },
+        ]}
+        containerStyle={[Gutters.regularHMargin]}
+      />
     </Wrapper>
   );
 };

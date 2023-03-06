@@ -19,6 +19,7 @@ export type ApplicationStackParamList = {
   Login: undefined;
   Register: undefined;
   ForgotPassword: undefined;
+  EditProfile: undefined;
 };
 
 export type ApplicationScreenProps =

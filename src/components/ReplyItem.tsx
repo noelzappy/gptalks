@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { useTheme } from '@/hooks';
 import { PostReply } from 'types/post';
 import { Avatar, ListItem } from '@rneui/base';
+import { getImageUrl } from '@/utils/misc';
 
 type Props = {
   item: PostReply;
@@ -26,7 +27,9 @@ const ReplyItem = ({ item, onPress }: Props) => {
         style={[Layout.row, Layout.alignItemsCenter, Gutters.regularTMargin]}
       >
         <Avatar
-          source={{ uri: 'https://picsum.photos/200' }}
+          source={{
+            uri: getImageUrl(item.user.avatar),
+          }}
           rounded
           size="small"
         />
@@ -40,18 +43,6 @@ const ReplyItem = ({ item, onPress }: Props) => {
         >
           <Text style={[Fonts.textSmall, Fonts.textBold]} numberOfLines={1}>
             {item.user.name}
-          </Text>
-
-          <Text
-            style={[
-              Fonts.textSmall,
-              {
-                fontSize: 12,
-              },
-            ]}
-            numberOfLines={1}
-          >
-            @{item.user.name}
           </Text>
         </View>
       </View>
