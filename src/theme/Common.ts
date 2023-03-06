@@ -72,6 +72,10 @@ export default function <C>({ Colors }: CommonParams<C>) {
         borderColor: Colors.grayLighter,
         borderRadius: 10,
         padding: 5,
+        position: 'absolute',
+        top: -10,
+        right: 0,
+        backgroundColor: Colors.light,
       },
       chatMenuIcon: {
         backgroundColor: Colors.grayLighter,

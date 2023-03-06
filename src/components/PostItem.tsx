@@ -13,7 +13,7 @@ type Props = {
 };
 
 const PostItem = ({ item, onPress }: Props) => {
-  const { Fonts, Common } = useTheme();
+  const { Fonts, Common, Layout, Gutters } = useTheme();
 
   const shotRef = useRef<any>(null);
   const [showImagViewer, setShowImagViewer] = useState(false);
@@ -28,6 +28,39 @@ const PostItem = ({ item, onPress }: Props) => {
 
   return (
     <>
+      <View
+        style={[Layout.row, Layout.alignItemsCenter, Gutters.regularTMargin]}
+      >
+        <Avatar
+          source={{ uri: 'https://picsum.photos/200' }}
+          rounded
+          size="small"
+        />
+
+        <View
+          style={[
+            {
+              marginLeft: 10,
+            },
+          ]}
+        >
+          <Text style={[Fonts.textSmall, Fonts.textBold]} numberOfLines={1}>
+            {item.user.name}
+          </Text>
+
+          <Text
+            style={[
+              Fonts.textSmall,
+              {
+                fontSize: 12,
+              },
+            ]}
+            numberOfLines={1}
+          >
+            @{item.user.name}
+          </Text>
+        </View>
+      </View>
       <ListItem
         bottomDivider
         containerStyle={[
@@ -38,13 +71,7 @@ const PostItem = ({ item, onPress }: Props) => {
         ]}
         onPress={onPress}
       >
-        <View>
-          <Avatar
-            source={{ uri: 'https://picsum.photos/200' }}
-            rounded
-            size="small"
-          />
-        </View>
+        <View />
 
         <ListItem.Content>
           <View

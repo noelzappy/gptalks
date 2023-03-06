@@ -3,8 +3,6 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { useTheme } from '@/hooks';
 import { ChatMessage } from 'types/chat';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
 import { Icon } from '@rneui/base';
 import * as Animatable from 'react-native-animatable';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -31,7 +29,6 @@ const ChatBubble = ({
   noAnimation,
 }: Props) => {
   const { Fonts, Common, Colors, Layout } = useTheme();
-  const { user } = useSelector((state: RootState) => state.auth);
 
   const [showTooltip, setShowTooltip] = useState(false);
   const [startClosing, setStartClosing] = useState(false);
