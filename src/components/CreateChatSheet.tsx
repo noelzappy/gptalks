@@ -48,7 +48,7 @@ function CreateChatSheet(props: SheetProps) {
     >
       <View style={[Gutters.regularHPadding, Gutters.regularBPadding]}>
         <Input
-          placeholder="Subject"
+          placeholder="Give your chat a name"
           inputContainerStyle={[Common.input]}
           value={subject}
           onChangeText={setSubject}

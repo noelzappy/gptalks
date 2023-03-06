@@ -75,7 +75,7 @@ const PostHead = ({ item, onPress }: Props) => {
               ref={shotRef}
               options={{
                 fileName: `post-${item.id}`,
-                format: 'jpg',
+                format: 'png',
                 quality: 0.9,
               }}
             >
