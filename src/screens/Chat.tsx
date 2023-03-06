@@ -294,7 +294,7 @@ const Screen = ({ route }: AllScreenProps) => {
   };
 
   const renderImageOption = () => {
-    if (text) return null;
+    if (text || showVoiceRecorder) return null;
 
     return (
       <TouchableOpacity
@@ -455,7 +455,7 @@ const Screen = ({ route }: AllScreenProps) => {
             },
           ]}
         >
-          <View style={[Gutters.smallHMargin]}>
+          <View style={[Gutters.smallHMargin, Gutters.smallTPadding]}>
             <LinearProgress
               color={Colors.primary}
               style={{
@@ -558,6 +558,9 @@ const Screen = ({ route }: AllScreenProps) => {
                 Layout.alignItemsCenter,
                 {
                   paddingHorizontal: 5,
+                  backgroundColor: showVoiceRecorder
+                    ? Colors.grayLighter
+                    : undefined,
                 },
               ]}
             >
@@ -571,11 +574,14 @@ const Screen = ({ route }: AllScreenProps) => {
                     height: inputHeight > 40 ? inputHeight + 10 : 48,
                     maxHeight: 110,
                     borderRadius: inputHeight > 40 ? 20 : 30,
+                    backgroundColor: showVoiceRecorder
+                      ? Colors.grayLighter
+                      : undefined,
                   },
                 ]}
               >
                 <TextInput
-                  placeholder="Type a message"
+                  placeholder={showVoiceRecorder ? '' : 'Type a message...'}
                   value={text}
                   onChangeText={setText}
                   style={[
