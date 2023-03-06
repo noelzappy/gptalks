@@ -109,6 +109,7 @@ const PostItem = ({ item, onPress }: Props) => {
                   showSender
                   disabled
                   noAnimation
+                  user={item.user}
                 />
                 <ChatBubble
                   item={item.response}

@@ -8,6 +8,7 @@ import * as Animatable from 'react-native-animatable';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useToast } from 'react-native-toast-notifications';
 import Tts from 'react-native-tts';
+import { User } from 'types/auth';
 
 type Props = {
   item: ChatMessage;
@@ -17,6 +18,7 @@ type Props = {
   selected?: boolean;
   fontSize?: number;
   noAnimation?: boolean;
+  user?: User;
 };
 
 const ChatBubble = ({
@@ -27,6 +29,7 @@ const ChatBubble = ({
   selected,
   fontSize,
   noAnimation,
+  user,
 }: Props) => {
   const { Fonts, Common, Colors, Layout } = useTheme();
 
@@ -111,7 +114,7 @@ const ChatBubble = ({
             ]}
             numberOfLines={1}
           >
-            {item.sender === 'user' ? 'Anonymous' : 'ChatGPT'}
+            {item.sender === 'user' ? user?.name || 'Anonymous' : 'ChatGPT'}
           </Text>
         )}
 
@@ -225,6 +228,7 @@ ChatBubble.defaultProps = {
   selected: false,
   fontSize: 14,
   noAnimation: false,
+  user: undefined,
 };
 
 export default ChatBubble;
