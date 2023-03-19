@@ -1,21 +1,10 @@
 # GPtalks
 
 This an unofficial mobile app for [ChatGPT](https://chat.openai.com/). It is built using React Native and TypeScript.
-The app allows you to login, register, view conversations, create conversations, share conversations, play conversations, view conversations, talk to ChatGPT with your voice, send an image to ChatGPT and it will extract the text from it and reply to that text, and view your profile.
+The app allows you to chat and talk with ChatGPT.
 
-You are able to share responses from ChatGPT with others. They can view and leave comments on the conversation. You can also view conversations that others have shared.
+You are able to share responses from ChatGPT with others. They can view and leave comments on the conversations you shared.
 
-# Features
+# The backend is written with NodeJs is located [HERE](https://github.com/noelzappy/gptalks-api)
 
-- Login
-- Register
-- List of talks/chats
-- Explore conversations others have shared
-- Create a new conversation
-- Share a conversation
-- View a conversation
-- Play a conversation (audio)
-- View a conversation (text)
-- Talk to ChatGPT with your voice
-- Send an image to ChatGPT and it will extract the text from it and reply to that text
-- View your profile
+# [BACKEND API](https://github.com/noelzappy/gptalks-api)
