@@ -8,3 +8,9 @@ You are able to share responses from ChatGPT with others. They can view and leav
 # The backend is written with NodeJs is located [HERE](https://github.com/noelzappy/gptalks-api)
 
 # [BACKEND API](https://github.com/noelzappy/gptalks-api)
+
+# Video demonstration:
+
+
+https://github.com/noelzappy/gptalks/assets/38583057/37970ab5-45b5-487b-8a63-7f133f92b301
+
